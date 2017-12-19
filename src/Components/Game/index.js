@@ -3,8 +3,8 @@ import Game from 'boardgame.io/game';
 
 import MineBoard from '../Board';
 
-const boardsize = 4;
-const mines = 8;
+const boardsize = 9;
+const mines = 10;
 const generateMinefield = size => {
   const sizeWithBorder = (size + 2) ** 2;
   const emptyCells = Array(sizeWithBorder).fill({
@@ -28,7 +28,30 @@ const generateMinefield = size => {
     };
   });
 };
-const cells = generateMinefield(boardsize);
+const insertMines = (minefield, size) => {
+  const copy = [...minefield];
+  let i = 0;
+
+  do {
+    const id = Math.floor(Math.random() * 100);
+    const mine = copy[id];
+    const { isBorder, hasBomb } = mine;
+
+    if (!isBorder && !hasBomb) {
+      copy[id] = {
+        ...mine,
+        hasBomb: true,
+      };
+
+      i += 1;
+    }
+  } while (i <= size);
+
+  return copy;
+};
+
+const emptyMineField = generateMinefield(boardsize);
+const cells = insertMines(emptyMineField, boardsize);
 
 const MineSweeper = Game({
   G: {
@@ -41,7 +64,10 @@ const MineSweeper = Game({
     revealMine(G, ctx, id) {},
   },
 });
-
-const MineSweeperGame = Client({ game: MineSweeper, board: MineBoard });
+const MineSweeperGame = Client({
+  game: MineSweeper,
+  board: MineBoard,
+  numPlayers: 1,
+});
 
 export default MineSweeperGame;
