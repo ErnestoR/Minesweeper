@@ -5,7 +5,6 @@ import MineBoard from '../Board';
 
 const boardsize = 4;
 const mines = 8;
-
 const generateMinefield = size => {
   const sizeWithBorder = (size + 2) ** 2;
   const emptyCells = Array(sizeWithBorder).fill({
@@ -29,16 +28,17 @@ const generateMinefield = size => {
     };
   });
 };
+const cells = generateMinefield(boardsize);
 
 const MineSweeper = Game({
   G: {
-    cells: generateMinefield(boardsize),
-    boardsize,
+    size: boardsize + 2,
+    cells,
     mines,
   },
 
   moves: {
-    clickCell(G, ctx, id) {},
+    revealMine(G, ctx, id) {},
   },
 });
 
