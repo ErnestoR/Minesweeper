@@ -61,7 +61,19 @@ const MineSweeper = Game({
   },
 
   moves: {
-    revealMine(G, ctx, id) {},
+    revealMine(G, ctx, id) {
+      const cellsCopy = [...G.cells];
+
+      cellsCopy[id] = {
+        ...cellsCopy[id],
+        isRevealed: true,
+      };
+
+      return {
+        ...G,
+        cells: [...cellsCopy],
+      };
+    },
   },
 });
 const MineSweeperGame = Client({
